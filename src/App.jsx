@@ -1,6 +1,7 @@
 import 'bulma/css/bulma.css';
 import './App.scss';
 import { useState } from 'react';
+import classNames from 'classnames';
 
 export const goods = [
   'Dumplings',
@@ -18,10 +19,14 @@ export const goods = [
 export const App = () => {
   const [selectedGood, setSelectedGood] = useState('Jam');
 
+  const handleSelection = newGood => {
+    setSelectedGood(good => (good === newGood ? '' : newGood));
+  };
+
   return (
     <main className="section container">
       <h1 className="title is-flex is-align-items-center">
-        {selectedGood ? selectedGood + ' is selected' : 'No goods selected'}
+        {selectedGood ? `${selectedGood} is selected` : 'No goods selected'}
 
         {selectedGood && (
           <button
@@ -42,27 +47,27 @@ export const App = () => {
               <tr
                 key={good}
                 data-cy="Good"
-                className={isSelected ? 'has-background-success-light' : ''}
+                className={classNames({
+                  'has-background-success-light': isSelected,
+                })}
               >
                 <td>
                   <button
                     data-cy={isSelected ? 'RemoveButton' : 'AddButton'}
                     type="button"
-                    className={isSelected ? 'button is-info' : 'button'}
-                    onClick={
-                      isSelected
-                        ? () => setSelectedGood('')
-                        : () => setSelectedGood(good)
-                    }
+                    className={classNames('button', {
+                      'is-info': isSelected,
+                    })}
+                    onClick={() => handleSelection(good)}
                   >
                     {isSelected ? '-' : '+'}
                   </button>
                 </td>
                 <td
                   data-cy="GoodTitle"
-                  className={
-                    isSelected ? 'has-text-black is-vcentered' : 'is-vcentered'
-                  }
+                  className={classNames('is-vcentered', {
+                    'has-background-success-light has-text-black': isSelected,
+                  })}
                 >
                   {good}
                 </td>
